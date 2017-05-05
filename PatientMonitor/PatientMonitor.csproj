@@ -124,17 +124,23 @@
     <Reference Include="Plugin.DeviceInfo">
       <HintPath>..\packages\Xam.Plugin.DeviceInfo.2.1.2\lib\Xamarin.iOS10\Plugin.DeviceInfo.dll</HintPath>
     </Reference>
-    <Reference Include="Kinvey-Utils">
-      <HintPath>..\packages\Kinvey.3.0.6\lib\Kinvey-Utils.dll</HintPath>
+    <Reference Include="OxyPlot">
+      <HintPath>..\packages\OxyPlot.Core.1.0.0\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1+Xamarin.iOS10\OxyPlot.dll</HintPath>
     </Reference>
-    <Reference Include="Kinvey-Xamarin">
-      <HintPath>..\packages\Kinvey.3.0.6\lib\Kinvey-Xamarin.dll</HintPath>
+    <Reference Include="OxyPlot.Xamarin.iOS">
+      <HintPath>..\packages\OxyPlot.Xamarin.iOS.1.0.0\lib\Xamarin.iOS10\OxyPlot.Xamarin.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="Kinvey-Utils">
+      <HintPath>..\packages\Kinvey.3.0.7\lib\Kinvey-Utils.dll</HintPath>
+    </Reference>
+    <Reference Include="Kinvey.Core">
+      <HintPath>..\packages\Kinvey.3.0.7\lib\Kinvey.Core.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp.Portable">
-      <HintPath>..\packages\Kinvey.3.0.6\lib\RestSharp.Portable.dll</HintPath>
+      <HintPath>..\packages\Kinvey.3.0.7\lib\RestSharp.Portable.dll</HintPath>
     </Reference>
     <Reference Include="Kinvey-Xamarin-iOS">
-      <HintPath>..\packages\Kinvey-ios.3.0.6\lib\Kinvey-Xamarin-iOS.dll</HintPath>
+      <HintPath>..\packages\Kinvey-ios.3.0.7\lib\Kinvey-Xamarin-iOS.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

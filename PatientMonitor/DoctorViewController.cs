@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,7 +7,7 @@ using CoreGraphics;
 using UIKit;
 using Kinvey;
 using System.Diagnostics;
-
+using OxyPlot;
 namespace PatientMonitor
 {
 	public partial class DoctorViewController : UIViewController
@@ -27,6 +28,11 @@ namespace PatientMonitor
 
 		internal User Doctor { get; set; }
 
+		ConcurrentQueue<DataPoint> DataPointsBuffer { get; set; }
+		int TimePoint { get; set; }
+
+		OxyPlot.PlotModel plotModel;
+
 		Stopwatch stopwatch = new Stopwatch();
 
 		public override void ViewDidLoad()
@@ -34,6 +40,9 @@ namespace PatientMonitor
 			base.ViewDidLoad();
 
 			SetupStreams();
+
+			DataPointsBuffer = new ConcurrentQueue<DataPoint>();
+			TimePoint = 0;
 
 			RenderView();
 		}
@@ -135,7 +144,16 @@ namespace PatientMonitor
 			View.AddSubview(TimeView);
 			TimeView.Hidden = true;
 
+			plotModel = new OxyPlot.PlotModel();
+			//plotModel.Background = OxyColor.FromRgb(131, 195, 202);
+			plotModel.Background = OxyColor.FromRgb(157, 194, 198);
+			plotModel.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = OxyPlot.Axes.AxisPosition.Bottom });
+			plotModel.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = OxyPlot.Axes.AxisPosition.Left });
 
+			OxyPlot.Xamarin.iOS.PlotView plotView = new OxyPlot.Xamarin.iOS.PlotView(new CGRect(10, 240, w - 20, 200));
+			plotView.Model = plotModel;
+
+			View.AddSubview(plotView);
 			//UIButton buttonPublishDecrement;
 			//buttonPublishDecrement = UIButton.FromType(UIButtonType.System);
 			//buttonPublishDecrement.Frame = new CGRect(10, 280, buttonWidth, 44);
@@ -167,7 +185,7 @@ namespace PatientMonitor
 
 			UIButton buttonLogout;
 			buttonLogout = UIButton.FromType(UIButtonType.System);
-			buttonLogout.Frame = new CGRect(10, 360, w - 20, 44);
+			buttonLogout.Frame = new CGRect(10, 460, w - 20, 44);
 			buttonLogout.SetTitle("Logout", UIControlState.Normal);
 			buttonLogout.SetTitleColor(UIColor.Black, UIControlState.Normal);
 			buttonLogout.BackgroundColor = UIColor.Gray;
@@ -187,6 +205,29 @@ namespace PatientMonitor
 		{
 			MessageView.Text = msg;
 			TimeView.Text = "Roundtrip Time: " + time;
+
+			DataPointsBuffer.Enqueue(new DataPoint(TimePoint++, int.Parse(msg))); //DateTime.Now.ToUniversalTime().Millisecond
+			if (DataPointsBuffer.Count > 10)
+			{
+				DataPoint popPoint;
+				DataPointsBuffer.TryDequeue(out popPoint);
+			}
+
+			var series1 = new OxyPlot.Series.LineSeries
+			{
+				MarkerType = OxyPlot.MarkerType.Circle,
+				MarkerSize = 4,
+				MarkerStroke = OxyPlot.OxyColors.White
+			};
+
+			foreach (var datapoint in DataPointsBuffer)
+			{
+				series1.Points.Add (datapoint);
+			}
+
+			plotModel.Series.Clear();
+			plotModel.Series.Add (series1);
+			plotModel.InvalidatePlot(true);
 		}
 	}
 }

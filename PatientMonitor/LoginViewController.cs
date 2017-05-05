@@ -33,7 +33,7 @@ namespace PatientMonitor
 			// Perform any additional setup after loading the view, typically from a nib.
 
 			View.BackgroundColor = UIColor.FromRGB(7, 69, 126);
-			Title = "Demo Kinvey Live Service - Login";
+			Title = "PatientMonitor - Feed Communication";
 
 			nfloat h = 31.0f;
 			nfloat w = View.Bounds.Width;
